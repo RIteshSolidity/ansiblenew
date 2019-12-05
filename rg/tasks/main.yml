@@ -1,0 +1,37 @@
+---
+- name: "Check required variables"
+  fail: msg="Variable '{{ item }}' is not defined"
+  when: item not in vars
+  with_items: "{{required_vars}}"
+- debug: 
+    "msg": |
+            input values are
+            ticket-number ({{ticketid}}) 
+            resource group name ({{rgname}})
+            resource group location ({{rlocation}})
+            starting process on resource
+- name: Create new Resource groups on azure
+  azure_rm_resourcegroup:
+    name: "{{rgname}}"
+    location: "{{rlocation}}"
+    tenant: "{{tenant}}"
+    subscription_id: "{{subscription}}"
+    client_id: "{{client}}"
+    secret: "{{secret}}"
+    state: "{{ispresent}}"
+    tags: "{{ tagvalues if tagvalues | default(false) else omit }}"
+    append_tags: "{{ 'yes' if tagsavailable | default(false) else omit }}"
+  any_errors_fatal: true
+  register: rg
+- debug: msg={{ rg }}
+- name: generate log file 
+  lineinfile:
+    dest: "{{ticketid}}.log"
+    line: "{{ item }}"
+    create: True
+    state: present
+  with_items:
+    - "{{rg}}"
+    - "{{ticketid}}"
+    - "completing the process of updating/creating the resource"
+

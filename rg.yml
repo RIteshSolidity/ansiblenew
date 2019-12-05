@@ -1,0 +1,37 @@
+---
+
+- hosts: localhost
+  any_errors_fatal: true
+  pre_tasks:
+  - name: "Pre-tasks execution"
+    lineinfile:
+      dest: "{{ticketid}}.log"
+      line: "starting resource group operation on azure"
+      create: True
+      state: present
+  tasks:
+  - include_role:
+      name: /home/citynextadmin/bp/rg
+    vars:
+      ticketid: '1000'
+      rgname: 'rolerg'
+      rlocation: 'westeurope'
+      tenant: 771f1cf4-b1ac-4f2e-ad21-de39ea201e7e
+      subscription: 9755ffce-e94b-4332-9be8-1ade15e78909
+      client: 140187fe-c0bd-4251-8ec3-f3c8dc190389
+      secret: g./Y2uwy:?UXEP6OzfoMH4PdXHn3K10n
+      tagsavailable: true
+      ispresent: present
+      tagvalues:
+        project: ritesh
+        domain: ansible
+        owner: modi
+    when: "1 == 1"
+  post_tasks:
+  - name: "Pre-tasks execution"
+    lineinfile:
+      dest: "{{ticketid}}.log"
+      line: "finished resource group operation on azure"
+      create: True
+      state: present
+

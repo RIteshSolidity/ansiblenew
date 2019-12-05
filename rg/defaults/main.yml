@@ -1,0 +1,8 @@
+required_vars:
+  - ticketid
+  - rgname
+  - rlocation
+  - tenant
+  - subscription
+  - client
+  - secret
